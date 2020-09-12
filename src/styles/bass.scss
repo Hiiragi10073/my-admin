@@ -3,9 +3,16 @@ body, div {
   padding: 0;
 }
 
+body {
+  min-height: 100vh;
+}
+
 a {
   text-decoration: none;
   color: #ccc;
+}
+#app {
+  height: 100vh;
 }
 
 input, img {

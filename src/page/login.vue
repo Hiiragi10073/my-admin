@@ -82,10 +82,14 @@ export default {
         if (status === 200) {
           // 将 token 存入vuex
           this.$store.commit("addToken", data.token);
+          localStorage.setItem("token", data.token);
+
           this.$message({
             message,
             type: "success",
           });
+          // 跳转到主页面
+          this.$router.push("/main");
         } else if (status === 401) {
           this.$message({
             message,
