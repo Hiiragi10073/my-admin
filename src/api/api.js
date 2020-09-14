@@ -19,3 +19,12 @@ export const updateFile = (data) => ajax(BaseURL + '/updateFile', data, 'POST');
 
 // 修改用户数据
 export const updateUser = (data) => ajax(BaseURL + '/updateUser', data, 'POST');
+
+// 获取文章分类
+export const getCategory = () => ajax(BaseURL + '/getCategory');
+
+// 新增文章分类
+export const updateCategory = (data) => ajax(BaseURL + '/updateCategory', data, 'POST');
+
+// 删除文章分类
+export const deleteCategory = (id) => ajax(BaseURL + '/deleteCategory', id);

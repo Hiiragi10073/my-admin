@@ -1,5 +1,5 @@
 <template>
-  <el-breadcrumb separator-class="el-icon-arrow-right" class="ad-breadcrumb">
+  <el-breadcrumb separator-class="el-icon-arrow-right" class="hi-breadcrumb">
     <el-breadcrumb-item :to="{ path: '/'}">首页</el-breadcrumb-item>
     <el-breadcrumb-item v-for="item in routes" :key="item.path">{{ item.name }}</el-breadcrumb-item>
   </el-breadcrumb>
@@ -47,7 +47,7 @@ export default {
 </script>
 
 <style lang="scss">
-.ad-breadcrumb {
+.hi-breadcrumb {
   .el-breadcrumb__item {
     .el-breadcrumb__inner {
       color: #fff;

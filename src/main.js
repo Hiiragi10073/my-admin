@@ -8,7 +8,9 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
 // 导入自定义组件
-import AdBreadcrumb from 'components/ad-breadcrumb';
+import AdBreadcrumb from 'components/hi-breadcrumb.vue';
+import HiTable from 'components/hi-table.vue';
+import HiButton from 'components/hi-button.vue';
 
 // 导入基本样式结构
 import 'styles/bass.scss';
@@ -23,6 +25,8 @@ Vue.filter('addBaseURL', value => {
 
 // 挂载自定义组件
 Vue.component('ad-breadcrumb', AdBreadcrumb);
+Vue.component('hi-table', HiTable);
+Vue.component('hi-button', HiButton);
 
 Vue.config.productionTip = false;
 
