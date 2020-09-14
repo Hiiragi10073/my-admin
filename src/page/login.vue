@@ -10,7 +10,7 @@
           <el-input v-model="formData.password" show-password></el-input>
         </el-form-item>
         <el-form-item class="button-group">
-          <el-button class="ad-button" type="primary" @click="onSubmit">登录</el-button>
+          <el-button class="bd-button" type="primary" @click="onSubmit">登录</el-button>
           <el-button @click="onReset">重置</el-button>
         </el-form-item>
       </el-form>
@@ -33,7 +33,7 @@ export default {
       rules: {
         username: [
           {
-            require: true,
+            required: true,
             message: "请输入用户名",
             trigger: ["blur", "change"],
           },
@@ -51,7 +51,7 @@ export default {
         ],
         password: [
           {
-            require: true,
+            required: true,
             message: "请输入密码",
             trigger: ["blur", "change"],
           },
@@ -130,7 +130,7 @@ export default {
       font-size: 24px;
     }
 
-    .ad-button {
+    .bd-button {
       margin-right: 100px;
     }
 
