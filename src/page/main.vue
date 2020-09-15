@@ -173,9 +173,10 @@ export default {
         if (this.editableTabs.find((item) => item.router === to.path)) {
           return;
         } else {
-          this.editableTabs.push(
-            this.menuData2.find((item) => item.router === to.path)
-          );
+          const tabItem = this.menuData2.find((item) => {
+            return item.router === to.path && item.children.length === 0;
+          });
+          this.editableTabs.push(tabItem);
           localStorage.setItem(
             "editableTabs",
             JSON.stringify(this.editableTabs)
@@ -279,7 +280,7 @@ export default {
   }
 
   .is-active {
-    color: #393939;
+    color: #fff;
   }
 
   .el-tabs__nav {

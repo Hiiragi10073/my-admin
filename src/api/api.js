@@ -28,3 +28,15 @@ export const updateCategory = (data) => ajax(BaseURL + '/updateCategory', data, 
 
 // 删除文章分类
 export const deleteCategory = (id) => ajax(BaseURL + '/deleteCategory', id);
+
+// 获取文章信息
+export const getPostList = (config) => ajax(BaseURL + '/getPostList', config, 'POST');
+
+// 删除文章
+export const deletePost = (id) => ajax(BaseURL + '/deletePost', id);
+
+// 上传文章封面
+export const uploadPostCover = (data) => ajax(BaseURL + '/uploadPostCover', data, 'POST');
+
+// 更新文章内容
+export const updatePost = (data) => ajax(BaseURL + '/updatePost', data, 'POST');

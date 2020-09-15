@@ -60,11 +60,12 @@ export default {
       this.$alert("确定要删除该分类吗", "提示", {
         confirmButtonText: "确定",
         callback: async (action) => {
-          const { status, message } = await deleteCategory(data.row.id);
-          console.log(status, message);
-          if (status === 200) {
-            this.$message.success(message);
-            this.getCategory();
+          if (action === "confirm") {
+            const { status, message } = await deleteCategory(data.row.id);
+            if (status === 200) {
+              this.$message.success(message);
+              this.getCategory();
+            }
           }
         },
       });
