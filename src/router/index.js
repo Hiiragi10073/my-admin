@@ -1,19 +1,28 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-// 将 vuex 的值导入用于验证 token 是否存在
-import store from '../store';
+// import Login from 'page/login.vue';
+// import Main from 'page/main.vue';
+// import Home from 'page/home.vue';
+// import Client from 'page/client.vue';
+// import Menu from 'page/menu.vue';
+// import Server from 'page/server.vue';
+// import PostList from 'page/post-list.vue';
+// import PostRelease from 'page/post-release.vue';
+// import PostCategory from 'page/post-category.vue';
+// import User from 'page/user.vue';
 
-import Login from 'page/login.vue';
-import Main from 'page/main.vue';
-import Home from 'page/home.vue';
-import Client from 'page/client.vue';
-import Menu from 'page/menu.vue';
-import Server from 'page/server.vue';
-import PostList from 'page/post-list.vue';
-import PostRelease from 'page/post-release.vue';
-import PostCategory from 'page/post-category.vue';
-import User from 'page/user.vue';
+
+const Login = () => import('page/login.vue');
+const Main = () => import('page/main.vue');
+const Home = () => import('page/home.vue');
+const Client = () => import('page/client.vue');
+const Menu = () => import('page/menu.vue');
+const Server = () => import('page/server.vue');
+const PostList = () => import('page/post-list.vue');
+const PostRelease = () => import('page/post-release.vue');
+const PostCategory = () => import('page/post-category.vue');
+const User = () => import('page/user.vue');
 
 Vue.use(VueRouter);
 

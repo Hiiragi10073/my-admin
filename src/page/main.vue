@@ -4,7 +4,7 @@
       <el-aside width="200px">
         <div class="logo">
           <router-link to="/main/home">
-            <h1>admin</h1>
+            <h1>Umisaki</h1>
           </router-link>
         </div>
         <!-- 导航菜单 -->
@@ -41,6 +41,21 @@
       <el-container>
         <!-- 头部 -->
         <el-header>
+          <!-- tabs -->
+          <el-tabs
+            v-model="editableTabsValue"
+            type="card"
+            closable
+            @tab-remove="removeTab"
+            @tab-click="clickTab"
+          >
+            <el-tab-pane
+              v-for="item in editableTabs"
+              :key="item.id"
+              :label="item.name"
+              :name="item.router"
+            ></el-tab-pane>
+          </el-tabs>
           <div class="user">
             <img :src="userData.profile_pic | addBaseURL" alt />
             <span class="username">{{ userData.nickname }}</span>
@@ -48,21 +63,6 @@
           </div>
         </el-header>
         <!-- 内容 -->
-        <!-- tabs -->
-        <el-tabs
-          v-model="editableTabsValue"
-          type="card"
-          closable
-          @tab-remove="removeTab"
-          @tab-click="clickTab"
-        >
-          <el-tab-pane
-            v-for="item in editableTabs"
-            :key="item.id"
-            :label="item.name"
-            :name="item.router"
-          ></el-tab-pane>
-        </el-tabs>
         <el-main>
           <router-view></router-view>
         </el-main>
@@ -225,6 +225,7 @@ export default {
 
 .el-main {
   background-color: #6e6e6e;
+  padding-top: 70px;
 }
 .el-tabs {
   margin-left: 20px;
@@ -234,9 +235,12 @@ export default {
   background-color: #fff;
   padding: 10px;
   margin-bottom: -50px;
+  position: relative;
 
   .user {
-    float: right;
+    position: absolute;
+    top: 5px;
+    right: 5px;
     display: flex;
     align-items: center;
     margin-right: 50px;

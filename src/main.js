@@ -20,7 +20,7 @@ Vue.use(ElementUI);
 
 // 创建过滤器
 Vue.filter('addBaseURL', value => {
-  return 'http://localhost:8090' + value;
+  return 'http://123.57.202.238:8090' + value;
 })
 
 // 挂载自定义组件

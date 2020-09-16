@@ -1,6 +1,7 @@
 <template>
   <div class="client">
     <ad-breadcrumb></ad-breadcrumb>
+    <h3>开发中。。。</h3>
   </div>
 </template>
 
@@ -8,5 +9,10 @@
 export default {};
 </script>
 
-<style>
+<style lang="scss" scoped>
+.client {
+  h3 {
+    color: #fff;
+  }
+}
 </style>
