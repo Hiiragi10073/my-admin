@@ -209,7 +209,6 @@ export default {
       this.$alert("确定要删除这篇文章吗？", "删除提示", {
         confirmButtonText: "确定删除",
         callback: async (action) => {
-          console.log(action);
           if (action === "confirm") {
             const { status, message } = await deletePost(data.row.id);
 
@@ -236,7 +235,6 @@ export default {
         alert("请选择文件");
         return;
       }
-      console.log(1);
       formData.append("file", file);
       const res = await uploadPostCover(formData);
       const { status, filePath } = res;

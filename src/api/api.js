@@ -40,3 +40,6 @@ export const uploadPostCover = (data) => ajax(BaseURL + '/uploadPostCover', data
 
 // 更新文章内容
 export const updatePost = (data) => ajax(BaseURL + '/updatePost', data, 'POST');
+
+// 发布文章
+export const releasePost = (data) => ajax(BaseURL + '/releasePost', data, 'POST');

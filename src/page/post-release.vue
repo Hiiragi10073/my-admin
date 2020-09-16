@@ -1,12 +1,161 @@
 <template>
   <div class="post-release">
     <ad-breadcrumb></ad-breadcrumb>
+    <div class="post-form">
+      <el-form :model="post">
+        <el-form-item label="标题" label-width="80px">
+          <el-input v-model="post.title" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="分类" label-width="80px">
+          <el-select v-model="post.category_id" placeholder="请选择分类">
+            <el-option v-for="item in categorys" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="封面图片" label-width="80px">
+          <el-upload
+            ref="upload"
+            class="avatar-uploader"
+            action="http://localhost:8090"
+            :http-request="upload"
+            :limit="1"
+            :show-file-list="false"
+          >
+            <img :src="post.cover | addBaseURL" class="avatar" v-if="post.cover" />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="文章内容" label-width="80px">
+          <vue-editor v-model="post.content" />
+        </el-form-item>
+        <el-form-item label-width="80px">
+          <el-button type="primary" @click="submit">提交</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { getCategory, uploadPostCover, releasePost } from "api/api.js";
+
+import { VueEditor } from "vue2-editor";
+
+export default {
+  data() {
+    return {
+      post: {
+        title: "",
+        category_id: null,
+        content: "",
+        cover: "",
+      },
+      categorys: [],
+    };
+  },
+  methods: {
+    // 获取分类数据
+    async getCategory() {
+      const { status, data } = await getCategory();
+      if (status === 200) {
+        this.categorys = data;
+      }
+    }, // 模态框图片自定义上传
+    async upload(params) {
+      const formData = new FormData();
+      const file = params.file;
+      const headerConfig = {
+        headers: { "Content-Type": "multipart/form-data" },
+      };
+      if (!file) {
+        alert("请选择文件");
+        return;
+      }
+      formData.append("file", file);
+      const res = await uploadPostCover(formData);
+      const { status, filePath } = res;
+      if (status === 200) {
+        this.post.cover = filePath;
+      }
+    },
+    submit() {
+      this.$alert("确认发布文章吗？", "提示", {
+        confirmButtonText: "发布",
+        callback: async (action) => {
+          if (action === "confirm") {
+            const { status, message } = await releasePost(this.post);
+
+            console.log(1);
+            if (status === 200) {
+              this.$message.success(message);
+              this.post = {
+                title: "",
+                category_id: null,
+                content: "",
+                cover: "",
+              };
+            } else {
+              this.$message.warning(message);
+            }
+          }
+        },
+      });
+    },
+  },
+  created() {
+    this.getCategory();
+  },
+  components: {
+    VueEditor,
+  },
+};
 </script>
 
-<style>
+<style lang="scss" scoped>
+.post-release {
+  .post-form {
+    margin-top: 40px;
+    padding: 20px 20px 8px 20px;
+    background-color: #fff;
+    border-radius: 5px;
+
+    .title {
+      font-weight: normal;
+      font-size: 24px;
+      color: #333;
+      margin: 20px 0;
+    }
+
+    .el-input {
+      width: 400px;
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+.post-release {
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409eff;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+}
 </style>
