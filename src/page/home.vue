@@ -34,6 +34,7 @@
       <div class="footer-box forword"></div>
       <div class="footer-box back"></div>
     </div>
+    <div class="icp"><a href="http://beian.miit.gov.cn" target="_blank">ICP: 闽ICP备2021014042号-1</a></div>
   </div>
 </template>
 
@@ -123,6 +124,12 @@ export default {};
       transform: translateY(-15px);
       background-color: #7d4a11;
     }
+  }
+
+  .icp {
+    position: absolute;
+    bottom: 50px;
+    right: 40px;
   }
 }
 </style>
