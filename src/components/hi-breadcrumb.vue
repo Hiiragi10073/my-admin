@@ -16,9 +16,9 @@ export default {
         { path: "client", name: "用户管理" },
         { path: "menu", name: "菜单管理" },
         { path: "server", name: "用户监控" },
-        { path: "post-list", name: "文章列表" },
-        { path: "post-release", name: "发布文章" },
-        { path: "post-category", name: "分类管理" },
+        { path: "blog-list", name: "博客列表" },
+        { path: "blog-release", name: "发布博客" },
+        { path: "blog-category", name: "分类管理" },
         { path: "user", name: "个人中心" },
       ],
     };
@@ -48,6 +48,8 @@ export default {
 
 <style lang="scss">
 .hi-breadcrumb {
+  margin-bottom: 10px;
+  
   .el-breadcrumb__item {
     .el-breadcrumb__inner {
       color: #fff;

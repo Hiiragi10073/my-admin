@@ -19,15 +19,15 @@
 </template>
 
 <script>
-import { login } from "api/api.js";
+import { login } from "api/user";
 
 export default {
   data() {
     return {
       // 表单数据
       formData: {
-        username: "admin",
-        password: "123456",
+        username: "",
+        password: "",
       },
       // 表单验证规则
       rules: {
@@ -89,7 +89,7 @@ export default {
             type: "success",
           });
           // 跳转到主页面
-          this.$router.push("/main");
+          this.$router.push("/");
         } else if (status === 401) {
           this.$message({
             message,

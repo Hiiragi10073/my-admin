@@ -1,14 +1,22 @@
 <template>
-  <div class="post-release">
-    <ad-breadcrumb></ad-breadcrumb>
-    <div class="post-form">
-      <el-form :model="post">
+  <div class="blog-release">
+    <hi-breadcrumb></hi-breadcrumb>
+    <div class="blog-form">
+      <el-form :model="blog">
         <el-form-item label="标题" label-width="80px">
-          <el-input v-model="post.title" autocomplete="off"></el-input>
+          <el-input v-model="blog.title" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="简介" label-width="80px">
+          <el-input type="textarea" v-model="blog.desc"></el-input>
         </el-form-item>
         <el-form-item label="分类" label-width="80px">
-          <el-select v-model="post.category_id" placeholder="请选择分类">
-            <el-option v-for="item in categorys" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          <el-select v-model="blog.categoryId" placeholder="请选择分类">
+            <el-option
+              v-for="item in categorys"
+              :key="item.id"
+              :label="item.category + ' ' + item.code"
+              :value="item.id"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="封面图片" label-width="80px">
@@ -20,12 +28,16 @@
             :limit="1"
             :show-file-list="false"
           >
-            <img :src="post.cover | addBaseURL" class="avatar" v-if="post.cover" />
+            <img
+              :src="blog.cover"
+              class="avatar"
+              v-if="blog.cover"
+            />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
         <el-form-item label="文章内容" label-width="80px">
-          <vue-editor v-model="post.content" />
+          <mavon-editor v-model="blog.content"/>
         </el-form-item>
         <el-form-item label-width="80px">
           <el-button type="primary" @click="submit">提交</el-button>
@@ -36,83 +48,84 @@
 </template>
 
 <script>
-import { getCategory, uploadPostCover, releasePost } from "api/api.js";
+import { getCategory, releaseBlog } from 'api/blog'
+import { uploadFile } from 'api/file'
 
-import { VueEditor } from "vue2-editor";
+import { VueEditor } from 'vue2-editor'
 
 export default {
+  name: 'BlogPost',
   data() {
     return {
-      post: {
-        title: "",
-        category_id: null,
-        content: "",
-        cover: "",
+      blog: {
+        title: '',
+        categoryId: null,
+        content: '',
+        desc: '',
+        cover: ''
       },
-      categorys: [],
-    };
+      categorys: []
+    }
   },
   methods: {
     // 获取分类数据
     async getCategory() {
-      const { status, data } = await getCategory();
+      const { status, data } = await getCategory()
       if (status === 200) {
-        this.categorys = data;
+        this.categorys = data
       }
     }, // 模态框图片自定义上传
     async upload(params) {
-      const formData = new FormData();
-      const file = params.file;
-      const headerConfig = {
-        headers: { "Content-Type": "multipart/form-data" },
-      };
+      const formData = new FormData()
+      const file = params.file
       if (!file) {
-        alert("请选择文件");
-        return;
+        alert('请选择文件')
+        return
       }
-      formData.append("file", file);
-      const res = await uploadPostCover(formData);
-      const { status, filePath } = res;
+      formData.append('file', file)
+      const res = await uploadFile(formData)
+      const { status, url } = res
       if (status === 200) {
-        this.post.cover = filePath;
+        this.blog.cover = url
       }
     },
     submit() {
-      this.$alert("确认发布文章吗？", "提示", {
-        confirmButtonText: "发布",
+      this.$alert('确认发布文章吗？', '提示', {
+        confirmButtonText: '发布',
         callback: async (action) => {
-          if (action === "confirm") {
-            const { status, message } = await releasePost(this.post);
+          if (action === 'confirm') {
+            const { status, message } = await releaseBlog(this.blog)
 
-            console.log(1);
+            console.log(1)
             if (status === 200) {
-              this.$message.success(message);
-              this.post = {
-                title: "",
-                category_id: null,
-                content: "",
-                cover: "",
-              };
+              this.$message.success(message)
+              this.blog = {
+                title: '',
+                categoryId: null,
+                content: '',
+                desc: '',
+                cover: ''
+              }
             } else {
-              this.$message.warning(message);
+              this.$message.warning(message)
             }
           }
-        },
-      });
-    },
+        }
+      })
+    }
   },
   created() {
-    this.getCategory();
+    this.getCategory()
   },
   components: {
-    VueEditor,
-  },
-};
+    VueEditor
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-.post-release {
-  .post-form {
+.blog-release {
+  .blog-form {
     margin-top: 40px;
     padding: 20px 20px 8px 20px;
     background-color: #fff;
@@ -133,7 +146,7 @@ export default {
 </style>
 
 <style lang="scss">
-.post-release {
+.blog-release {
   .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;

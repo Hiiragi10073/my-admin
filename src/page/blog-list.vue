@@ -1,6 +1,6 @@
 <template>
-  <div class="post-list">
-    <ad-breadcrumb></ad-breadcrumb>
+  <div class="blog-list">
+    <hi-breadcrumb></hi-breadcrumb>
     <!-- 搜索区 -->
     <div class="search-from">
       <el-form ref="searchFrom" :inline="true" :model="searchParams" class="demo-form-inline">
@@ -8,9 +8,9 @@
           <el-input v-model="searchParams.keyword" placeholder="关键词"></el-input>
         </el-form-item>
         <el-form-item label="分类">
-          <el-select v-model="searchParams.category_id" placeholder="分类">
+          <el-select v-model="searchParams.categoryId" placeholder="分类">
             <el-option label="所有分类" :value="0"></el-option>
-            <el-option v-for="item in categorys" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            <el-option v-for="item in categorys" :key="item.id" :label="item.category" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -30,13 +30,7 @@
       >
         <el-table-column type="expand" width="50px">
           <template slot-scope="props">
-            <el-input
-              type="textarea"
-              autosize
-              readonly
-              placeholder="请输入内容"
-              v-html="props.row.content"
-            ></el-input>
+            <mavon-editor v-model="props.row.content" :editable="false" :toolbarsFlag="false" defaultOpen="preview" :subfield="false" />
           </template>
         </el-table-column>
         <el-table-column type="index" label="序号" width="50px"></el-table-column>
@@ -45,7 +39,7 @@
         <el-table-column prop="cover" label="封面">
           <template slot-scope="props">
             <div class="cover">
-              <img class="cover-img" :src="props.row.cover | addBaseURL" />
+              <img class="cover-img" :src="props.row.cover" />
             </div>
           </template>
         </el-table-column>
@@ -65,18 +59,21 @@
       ></el-pagination>
     </div>
     <!-- 编辑模态框 -->
-    <div class="edit-post-from">
+    <div class="edit-blog-from">
       <el-dialog title="编辑文章" :visible.sync="dialogFormVisible">
         <el-form :model="editForm">
           <el-form-item label="标题" label-width="80px">
             <el-input v-model="editForm.title" autocomplete="off"></el-input>
           </el-form-item>
+          <el-form-item label="简介" label-width="80px">
+            <el-input type="textarea" v-model="editForm.desc"></el-input>
+          </el-form-item>
           <el-form-item label="分类" label-width="80px">
-            <el-select v-model="editForm.category_id" placeholder="请选择分类">
+            <el-select v-model="editForm.categoryId" placeholder="请选择分类">
               <el-option
                 v-for="item in categorys"
                 :key="item.id"
-                :label="item.name"
+                :label="item.category"
                 :value="item.id"
               ></el-option>
             </el-select>
@@ -98,12 +95,12 @@
             </el-upload>
           </el-form-item>
           <el-form-item label="文章内容" label-width="80px">
-            <vue-editor v-model="editForm.content" />
+            <mavon-editor v-model="editForm.content"/>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="editPost">确 定</el-button>
+          <el-button type="primary" @click="editBlog">确 定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -112,16 +109,17 @@
 
 <script>
 import {
-  getPostList,
+  getBlogList,
   getCategory,
-  deletePost,
-  uploadPostCover,
-  updatePost,
-} from "api/api.js";
+  deleteBlog,
+  updateBlog,
+} from "api/blog";
+import { uploadFile } from 'api/file'
 
 import { VueEditor } from "vue2-editor";
 
 export default {
+  name: 'BlogList',
   data() {
     return {
       tableData: [],
@@ -132,7 +130,7 @@ export default {
       total: 0,
       searchParams: {
         keyword: "",
-        category_id: 0,
+        categoryId: 0,
       },
       // 模态框配置
       dialogFormVisible: false,
@@ -149,22 +147,20 @@ export default {
       }
     },
     // 获取文章列表
-    async getPostData() {
-      const { keyword, category_id } = this.searchParams;
-      const { status, data, total } = await getPostList({
+    async getBlogData() {
+      const { status, data, total } = await getBlogList({
         limit: this.limit,
         offset: this.offset,
-        keyword,
-        category_id,
+        ...this.searchParams,
       });
       if (status === 200) {
         // 给每个数据按照分类id添加分类名称
         data.forEach((item) => {
           let categoryItem = this.categorys.find(
-            (category) => category.id === item.category_id
+            (category) => category.id == item.categoryId
           );
           if (categoryItem) {
-            item.category = categoryItem.name;
+            item.category = categoryItem.category;
           } else {
             item.category = "暂无分类";
           }
@@ -179,19 +175,19 @@ export default {
       // 根据当前页数计算偏移
       this.offset = (currentPage - 1) * this.limit;
       // 重新获得数据
-      this.getPostData();
+      this.getBlogData();
     },
     // 搜索文章按钮
     search() {
-      this.getPostData();
+      this.getBlogData();
     },
     // 重置搜索内容
     resetSearch() {
       this.searchParams = {
         keyword: "",
-        category_id: 0,
+        categoryId: 0,
       };
-      this.getPostData();
+      this.getBlogData();
     },
     // 编辑按钮回调
     handleEdit(data) {
@@ -210,11 +206,11 @@ export default {
         confirmButtonText: "确定删除",
         callback: async (action) => {
           if (action === "confirm") {
-            const { status, message } = await deletePost(data.row.id);
+            const { status, message } = await deleteBlog(data.row.id);
 
             if (status === 200) {
               this.$message.success(message);
-              this.getPostData();
+              this.getBlogData();
             }
           }
         },
@@ -236,27 +232,27 @@ export default {
         return;
       }
       formData.append("file", file);
-      const res = await uploadPostCover(formData);
+      const res = await uploadFile(formData);
       const { status, filePath } = res;
       if (status === 200) {
-        this.fileList[0].url = this.$options.filters["addBaseURL"](filePath);
+        this.fileList[0].url = filePath
         this.editForm.cover = filePath;
       }
     },
     // 编辑完成 确定上传
-    async editPost() {
-      const res = await updatePost(this.editForm);
+    async editBlog() {
+      const res = await updateBlog(this.editForm);
       const { status, message } = res;
       if (status === 200) {
         this.$message.success(message);
-        this.getPostData();
+        this.getBlogData();
       }
       this.dialogFormVisible = false;
     },
   },
   async created() {
     await this.getCategory();
-    this.getPostData();
+    this.getBlogData();
   },
   components: {
     VueEditor,
@@ -265,7 +261,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.post-list {
+.blog-list {
   .search-from {
     text-align: right;
     color: #fff;
@@ -295,7 +291,7 @@ export default {
 </style>
 
 <style lang="scss">
-.post-list {
+.blog-list {
   .hi-table-th,
   .hi-table-th th {
     background-color: #f3843d;

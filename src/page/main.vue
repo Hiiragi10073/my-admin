@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { getUserData, getMenuData } from "api/api.js";
+import { getUserData, getMenuData } from "api/user";
 // 函数：将数组重组成一个立体的数组
 import { unFlatArray } from "utils/unFlatArray";
 

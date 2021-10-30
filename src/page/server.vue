@@ -1,6 +1,6 @@
 <template>
   <div class="server">
-    <ad-breadcrumb></ad-breadcrumb>
+    <hi-breadcrumb></hi-breadcrumb>
   </div>
 </template>
 

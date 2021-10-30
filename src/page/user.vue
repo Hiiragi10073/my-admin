@@ -1,6 +1,6 @@
 <template>
   <div class="user">
-    <ad-breadcrumb></ad-breadcrumb>
+    <hi-breadcrumb></hi-breadcrumb>
     <div class="form-box">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="昵称" prop="nickname">
@@ -65,7 +65,7 @@
 
 <script>
 // 引入接口函数
-import { getUserData, updateFile, updateUser } from "api/api";
+import { getUserData, updateFile, updateUser } from "api/user";
 
 // 引入vue-cropper
 import { VueCropper } from "vue-cropper";

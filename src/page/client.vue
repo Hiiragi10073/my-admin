@@ -1,6 +1,6 @@
 <template>
   <div class="client">
-    <ad-breadcrumb></ad-breadcrumb>
+    <hi-breadcrumb></hi-breadcrumb>
     <h3>开发中。。。</h3>
   </div>
 </template>
