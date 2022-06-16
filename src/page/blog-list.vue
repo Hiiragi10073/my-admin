@@ -28,11 +28,6 @@
         header-row-class-name="hi-table-th"
         height="520px"
       >
-        <el-table-column type="expand" width="50px">
-          <template slot-scope="props">
-            <mavon-editor v-model="props.row.content" :editable="false" :toolbarsFlag="false" defaultOpen="preview" :subfield="false" />
-          </template>
-        </el-table-column>
         <el-table-column type="index" label="序号" width="50px"></el-table-column>
         <el-table-column prop="title" label="标题"></el-table-column>
         <el-table-column prop="category" label="分类" width="200px"></el-table-column>
@@ -95,7 +90,9 @@
             </el-upload>
           </el-form-item>
           <el-form-item label="文章内容" label-width="80px">
-            <mavon-editor v-model="editForm.content"/>
+            <div class="editor-box">
+              <mavon-editor v-model="editForm.content" :subfield="false" />
+            </div>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -143,7 +140,7 @@ export default {
     async getCategory() {
       const { status, data } = await getCategory();
       if (status === 200) {
-        this.categorys = data;
+        this.categorys = data.map(item => ({...item, id: '' + item.id}));
       }
     },
     // 获取文章列表
@@ -286,6 +283,11 @@ export default {
     .pagination {
       margin: 10px 0;
     }
+  }
+
+  .editor-box {
+    height: 300px;
+    overflow-y: auto;
   }
 }
 </style>

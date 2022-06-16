@@ -3,7 +3,7 @@
     <el-container>
       <el-aside width="200px">
         <div class="logo">
-          <router-link to="/main/home">
+          <router-link to="/home">
             <h1>Umisaki</h1>
           </router-link>
         </div>
@@ -131,10 +131,10 @@ export default {
         this.editableTabs.push({
           id: 1,
           name: "首页",
-          router: "/main/home",
+          router: "/home",
         });
-        this.$router.push("/main/home");
-        this.editableTabsValue = "/main/home";
+        this.$router.push("/home");
+        this.editableTabsValue = "/home";
         return;
       }
       // 如果存在 则直接读取，并激活对应的tabs

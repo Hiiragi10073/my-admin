@@ -37,7 +37,9 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="文章内容" label-width="80px">
-          <mavon-editor v-model="blog.content"/>
+            <div class="editor-box">
+              <mavon-editor v-model="blog.content" :subfield="false" />
+            </div>
         </el-form-item>
         <el-form-item label-width="80px">
           <el-button type="primary" @click="submit">提交</el-button>
@@ -169,6 +171,11 @@ export default {
     width: 178px;
     height: 178px;
     display: block;
+  }
+  
+  .editor-box {
+    height: 300px;
+    overflow-y: auto;
   }
 }
 </style>

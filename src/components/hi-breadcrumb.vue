@@ -17,7 +17,7 @@ export default {
         { path: "menu", name: "菜单管理" },
         { path: "server", name: "用户监控" },
         { path: "blog-list", name: "博客列表" },
-        { path: "blog-release", name: "发布博客" },
+        { path: "blog-post", name: "发布博客" },
         { path: "blog-category", name: "分类管理" },
         { path: "user", name: "个人中心" },
       ],
@@ -28,9 +28,10 @@ export default {
       const { path } = this.$route;
 
       this.routes = path
-        .slice(6)
-        .split("#")
+        .slice(1)
+        .split('/')
         .map((item, index) => {
+          console.log(item);
           let name = this.names.find((nameItem) => nameItem.path === item).name;
 
           return {
