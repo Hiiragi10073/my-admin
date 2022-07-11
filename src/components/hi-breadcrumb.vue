@@ -1,7 +1,9 @@
 <template>
   <el-breadcrumb separator-class="el-icon-arrow-right" class="hi-breadcrumb">
-    <el-breadcrumb-item :to="{ path: '/'}">首页</el-breadcrumb-item>
-    <el-breadcrumb-item v-for="item in routes" :key="item.path">{{ item.name }}</el-breadcrumb-item>
+    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+    <el-breadcrumb-item v-for="item in routes" :key="item.path">{{
+      item.name
+    }}</el-breadcrumb-item>
   </el-breadcrumb>
 </template>
 
@@ -11,45 +13,46 @@ export default {
     return {
       routes: [],
       names: [
-        { path: "main", name: "首页" },
-        { path: "home", name: "首页" },
-        { path: "client", name: "用户管理" },
-        { path: "menu", name: "菜单管理" },
-        { path: "server", name: "用户监控" },
-        { path: "blog-list", name: "博客列表" },
-        { path: "blog-release", name: "发布博客" },
-        { path: "blog-category", name: "分类管理" },
-        { path: "user", name: "个人中心" },
-      ],
+        { path: 'main', name: '首页' },
+        { path: 'home', name: '首页' },
+        { path: 'client', name: '用户管理' },
+        { path: 'menu', name: '菜单管理' },
+        { path: 'server', name: '用户监控' },
+        { path: 'blog-list', name: '博客列表' },
+        { path: 'blog-post', name: '发布博客' },
+        { path: 'blog-category', name: '分类管理' },
+        { path: 'user', name: '个人中心' }
+      ]
     };
   },
   methods: {
     getRoute() {
       const { path } = this.$route;
+      console.log(path);
 
       this.routes = path
-        .slice(6)
-        .split("#")
+        .slice(1)
+        .split('/')
         .map((item, index) => {
-          let name = this.names.find((nameItem) => nameItem.path === item).name;
+          let name = this.names.find(nameItem => nameItem.path === item).name;
 
           return {
             name: name,
-            path: item,
+            path: item
           };
         });
-    },
+    }
   },
   created() {
     this.getRoute();
-  },
+  }
 };
 </script>
 
 <style lang="scss">
 .hi-breadcrumb {
   margin-bottom: 10px;
-  
+
   .el-breadcrumb__item {
     .el-breadcrumb__inner {
       color: #fff;

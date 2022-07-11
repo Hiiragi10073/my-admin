@@ -19,7 +19,10 @@
         >
           <div v-for="item in menuData" :key="item.id">
             <!-- 非分页菜单 -->
-            <el-menu-item :index="item.router" v-if="item.children.length === 0">
+            <el-menu-item
+              :index="item.router"
+              v-if="item.children.length === 0"
+            >
               <i :class="item.icon"></i>
               <span slot="title">{{ item.name }}</span>
             </el-menu-item>
@@ -33,7 +36,8 @@
                 :index="subItem.router"
                 v-for="subItem in item.children"
                 :key="subItem.id"
-              >{{ subItem.name }}</el-menu-item>
+                >{{ subItem.name }}</el-menu-item
+              >
             </el-submenu>
           </div>
         </el-menu>
@@ -59,7 +63,9 @@
           <div class="user">
             <img :src="userData.profile_pic | addBaseURL" alt />
             <span class="username">{{ userData.nickname }}</span>
-            <el-button size="mini" type="warning" round @click="logout">退出</el-button>
+            <el-button size="mini" type="warning" round @click="logout"
+              >退出</el-button
+            >
           </div>
         </el-header>
         <!-- 内容 -->
@@ -72,9 +78,9 @@
 </template>
 
 <script>
-import { getUserData, getMenuData } from "api/user";
+import { getUserData, getMenuData } from 'api/user';
 // 函数：将数组重组成一个立体的数组
-import { unFlatArray } from "utils/unFlatArray";
+import { unFlatArray } from 'utils/unFlatArray';
 
 export default {
   data() {
@@ -85,8 +91,8 @@ export default {
       // 展开的菜单数组
       menuData2: [],
       // tabs 栏的数据
-      editableTabsValue: "",
-      editableTabs: [],
+      editableTabsValue: '',
+      editableTabs: []
     };
   },
   methods: {
@@ -99,17 +105,17 @@ export default {
     },
     // 退出登录
     logout() {
-      this.$confirm("您将退出登录，是否继续？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('您将退出登录，是否继续？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       }).then(() => {
-        localStorage.removeItem("token");
-        this.$router.push("/login");
+        localStorage.removeItem('token');
+        this.$router.push('/login');
         this.$message({
-          type: "success",
-          message: "退出登录成功",
-        }).catch((err) => {
+          type: 'success',
+          message: '退出登录成功'
+        }).catch(err => {
           console.log(err);
         });
       });
@@ -127,18 +133,18 @@ export default {
     // 页面初始化时获取tabs栏的本地数据
     getEditableTabs() {
       // 如果数据不存在 则添加一个首页并且跳转到首页
-      if (!localStorage.getItem("editableTabs")) {
+      if (!localStorage.getItem('editableTabs')) {
         this.editableTabs.push({
           id: 1,
-          name: "首页",
-          router: "/main/home",
+          name: '首页',
+          router: '/home'
         });
-        this.$router.push("/main/home");
-        this.editableTabsValue = "/main/home";
+        this.$router.push('/home');
+        this.editableTabsValue = '/home';
         return;
       }
       // 如果存在 则直接读取，并激活对应的tabs
-      this.editableTabs = JSON.parse(localStorage.getItem("editableTabs"));
+      this.editableTabs = JSON.parse(localStorage.getItem('editableTabs'));
       this.editableTabsValue = this.$route.path;
     },
 
@@ -148,48 +154,48 @@ export default {
 
     removeTab(name) {
       // 获得移除的tabs的路由路径在tabs数组中的位置
-      const index = this.editableTabs.findIndex((item) => item.router === name);
+      const index = this.editableTabs.findIndex(item => item.router === name);
       // 不删除首页
       if (index === 0) return;
 
       // 删除对应的tabs
       this.editableTabs = this.editableTabs.filter(
-        (item) => item.router !== name
+        item => item.router !== name
       );
 
       // 存储到本地
-      localStorage.setItem("editableTabs", JSON.stringify(this.editableTabs));
+      localStorage.setItem('editableTabs', JSON.stringify(this.editableTabs));
       // 判断删除的tabs的路由是不是当前页面 如果不是就什么都不做，如果是则跳转到左侧一个的tabs对应的路径
-      if (this.editableTabs.find((item) => this.$route.path === item.router))
+      if (this.editableTabs.find(item => this.$route.path === item.router))
         return;
       this.$router.push(this.editableTabs[index - 1].router);
-    },
+    }
   },
   watch: {
     // 监测 route 变化来修改tabs栏相关数据
     $route: {
       handler(to, from) {
         this.editableTabsValue = to.path;
-        if (this.editableTabs.find((item) => item.router === to.path)) {
+        if (this.editableTabs.find(item => item.router === to.path)) {
           return;
         } else {
-          const tabItem = this.menuData2.find((item) => {
+          const tabItem = this.menuData2.find(item => {
             return item.router === to.path && item.children.length === 0;
           });
           this.editableTabs.push(tabItem);
           localStorage.setItem(
-            "editableTabs",
+            'editableTabs',
             JSON.stringify(this.editableTabs)
           );
         }
-      },
-    },
+      }
+    }
   },
   created() {
     this.getUserData();
     this.getEditableTabs();
     this.getMenuData();
-  },
+  }
 };
 </script>
 

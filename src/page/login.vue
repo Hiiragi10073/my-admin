@@ -7,10 +7,16 @@
           <el-input v-model="formData.username"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="formData.password" show-password></el-input>
+          <el-input
+            v-model="formData.password"
+            @keyup.native="onPwdKeyup"
+            show-password
+          ></el-input>
         </el-form-item>
         <el-form-item class="button-group">
-          <el-button class="bd-button" type="primary" @click="onSubmit">登录</el-button>
+          <el-button class="bd-button" type="primary" @click="onSubmit"
+            >登录</el-button
+          >
           <el-button @click="onReset">重置</el-button>
         </el-form-item>
       </el-form>
@@ -19,55 +25,55 @@
 </template>
 
 <script>
-import { login } from "api/user";
+import { login } from 'api/user';
 
 export default {
   data() {
     return {
       // 表单数据
       formData: {
-        username: "",
-        password: "",
+        username: '',
+        password: ''
       },
       // 表单验证规则
       rules: {
         username: [
           {
             required: true,
-            message: "请输入用户名",
-            trigger: ["blur", "change"],
+            message: '请输入用户名',
+            trigger: ['blur', 'change']
           },
           {
             min: 3,
             max: 6,
-            message: "长度再 3 到 6 个字符",
-            trigger: ["blur", "change"],
+            message: '长度再 3 到 6 个字符',
+            trigger: ['blur', 'change']
           },
           {
             pattern: /^[a-z]+$/i,
-            message: "只能使用英文字母",
-            trigger: ["blur", "change"],
-          },
+            message: '只能使用英文字母',
+            trigger: ['blur', 'change']
+          }
         ],
         password: [
           {
             required: true,
-            message: "请输入密码",
-            trigger: ["blur", "change"],
+            message: '请输入密码',
+            trigger: ['blur', 'change']
           },
           {
             min: 3,
             max: 6,
-            message: "长度再 3 到 6 个字符",
-            trigger: ["blur", "change"],
+            message: '长度再 3 到 6 个字符',
+            trigger: ['blur', 'change']
           },
           {
             pattern: /^\d+$/,
-            message: "只能使用数字",
-            trigger: ["blur", "change"],
-          },
-        ],
-      },
+            message: '只能使用数字',
+            trigger: ['blur', 'change']
+          }
+        ]
+      }
     };
   },
   methods: {
@@ -81,26 +87,26 @@ export default {
         const { status, message, data } = await login(this.formData);
         if (status === 200) {
           // 将 token 存入vuex
-          this.$store.commit("addToken", data.token);
-          localStorage.setItem("token", data.token);
+          this.$store.commit('addToken', data.token);
+          localStorage.setItem('token', data.token);
 
           this.$message({
             message,
-            type: "success",
+            type: 'success'
           });
           // 跳转到主页面
-          this.$router.push("/");
+          this.$router.push('/');
         } else if (status === 401) {
           this.$message({
             message,
-            type: "warning",
+            type: 'warning'
           });
         }
       } catch (error) {
         // 错误提示
         this.$message({
-          message: "用户名和密码格式不正确",
-          type: "warning",
+          message: '用户名和密码格式不正确',
+          type: 'warning'
         });
       }
     },
@@ -108,7 +114,12 @@ export default {
     onReset() {
       this.$refs.form.resetFields();
     },
-  },
+    onPwdKeyup({ keyCode }) {
+      if (keyCode === 13) {
+        this.onSubmit();
+      }
+    }
+  }
 };
 </script>
 

@@ -1,7 +1,16 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
-Vue.use(VueRouter)
+const originPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function(location, onResolve, onReject) {
+  if (onResolve || onReject) {
+    originPush.call(this, location, onResolve, onReject);
+  } else {
+    originPush.call(this, location).catch(err => err);
+  }
+};
+
+Vue.use(VueRouter);
 
 const router = new VueRouter({
   routes: [
@@ -53,17 +62,17 @@ const router = new VueRouter({
       ]
     }
   ]
-})
+});
 
 // 路由守卫 拦截没有token的登录
 router.beforeEach((to, from, next) => {
   if (to.path === '/login') {
-    next()
+    next();
   } else if (localStorage.getItem('token')) {
-    next()
+    next();
   } else {
-    next('/login')
+    next('/login');
   }
-})
+});
 
-export default router
+export default router;
